@@ -75,6 +75,7 @@ class HyperBRKGASearchCV(BaseSearchCV):
             self,
             estimator,
             brkga_params=None,
+            exploit_method=None,
             *,
             scoring=None,
             n_jobs=None,
@@ -108,8 +109,13 @@ class HyperBRKGASearchCV(BaseSearchCV):
 
         self.decoder = Decoder(self._parameters, estimator, data, target, cv)
         elite_number = int(self.brkga_config.elite_percentage * self.brkga_config.population_size)
-        self.em_bo = BayesianOptimizerElites(decoder=self.decoder, e=0.3, steps=3, percentage=0.6,
-                                             eliteNumber=elite_number)
+
+        if exploit_method is not None:
+            self.em = exploit_method(self.decoder, percentage=0.6, eliteNumber=elite_number)
+        else:
+            self.em = BayesianOptimizerElites(decoder=self.decoder, e=0.3, steps=3, percentage=0.6,
+                                              eliteNumber=elite_number)
+
         chromosome_size = len(self._parameters)
         self.brkga = BrkgaMpIpr(
             decoder=self.decoder,
@@ -119,7 +125,7 @@ class HyperBRKGASearchCV(BaseSearchCV):
             params=self.brkga_config,
             diversity_control_on=True,
             n_close=3,
-            exploitation_method=self.em_bo
+            exploitation_method=self.em
         )
 
         self.brkga.initialize()
