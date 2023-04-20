@@ -24,8 +24,8 @@ from hbrkga.exploitation_method_BO_only_elites import BayesianOptimizerElites
 class Decoder:
 
 """
-    A classe Decoder é responsável por fazer a conversão dos parâmetros em indivíduos do algoritmo genético e 
-    também por convertê-los de volta.
+    A classe Decoder é responsável por fazer a conversão dos parâmetros em indivíduos
+    do algoritmo genético e  também por convertê-los de volta.
 
     Parameters
     ----------
