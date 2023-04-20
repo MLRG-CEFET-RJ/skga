@@ -20,11 +20,26 @@ from hbrkga.brkga_mp_ipr.types import BaseChromosome
 from hbrkga.brkga_mp_ipr.types_io import load_configuration
 from hbrkga.exploitation_method_BO_only_elites import BayesianOptimizerElites
 
-#Criaremos então a classe Decoder, a qual definirá  init(inicial) 
-#com parâmetros sendo o self,bem como seus parâmetros e estimadores,seu valor de x,seu valor de v e seu cv
-#Também definirá seus limites dentro da list, a qual usa como parâmetro as chaves do parâmetro de self. 
+ 
 class Decoder:
 
+"""
+    A classe Decoder é responsável por fazer a conversão dos parâmetros em indivíduos do algoritmo genético e 
+    também por convertê-los de volta.
+
+    Parameters
+    ----------
+    parameters: <<DIZER QUAIS SÃO OS TIPOS ACEITOS>>
+    <<DEFINIR O QUE É ESSE PARÂMETRO (EXEMPLO ABAIXO)>>
+    The parameter grid to explore, as a dictionary mapping estimator
+    parameters to sequences of allowed values.
+
+    An empty dict signifies default parameters.
+
+    A sequence of dicts signifies a sequence of grids to search, and is
+    useful to avoid exploring parameter combinations that make no sense
+    or have no effect. See the examples below.
+    """
     def __init__(self, parameters, estimator, X, y, cv):
         self._parameters = parameters
         self._estimator = estimator
