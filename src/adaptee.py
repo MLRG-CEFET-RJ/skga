@@ -22,6 +22,23 @@ from hbrkga.exploitation_method_BO_only_elites import BayesianOptimizerElites
 
  
 class Decoder:
+    """
+    A classe Decoder é responsável por fazer a conversão dos parâmetros em indivíduos do algoritmo genético e 
+    também por convertê-los de volta.
+
+    Parameters
+    ----------
+    parameters: <<DIZER QUAIS SÃO OS TIPOS ACEITOS>>
+    <<DEFINIR O QUE É ESSE PARÂMETRO (EXEMPLO ABAIXO)>>
+    The parameter grid to explore, as a dictionary mapping estimator
+    parameters to sequences of allowed values.
+
+    An empty dict signifies default parameters.
+
+    A sequence of dicts signifies a sequence of grids to search, and is
+    useful to avoid exploring parameter combinations that make no sense
+    or have no effect. See the examples below.
+    """
 
 """
     A classe Decoder é responsável por fazer a conversão dos parâmetros em indivíduos
@@ -52,6 +69,25 @@ class Decoder:
 #Isso converterá seu valor para float
 #Ele também retornará o score do self, usando como parâmetro o encoder do self o qual por sua vez o cromossomo como parâmetro
     def decode(self, chromosome: BaseChromosome, rewrite: bool) -> float:
+        """
+        Definição da decodificação, o qual usa como parâmetro o cromossomo base  variável cromossomo e a variável booleana de escrita. 
+        O método retorna o resultado da função de avaliação para um dado cromossomo.
+        
+        Parameters
+        
+        ----------
+        chromosome: BaseChromosome
+        <<DFINIR O QUE É ESSE PARÂMETRO>>
+        
+        rewrite:bool
+        <<DEFINIR O QUE É ESSE PARÂMETRO>>
+        
+        Returns
+        
+        -------
+        score:float
+        resultado da função de avaliação para o cromossomo
+        """
         return self.score(self.encoder(chromosome))
 #Definição do encoder, usando como parâmetro o self e o cromossomo base da variável cromossomo o qual converterá o valor para dict
 #Ele também estabelece a variável do tamanho do cromossomo usando o length da variável chromosome
