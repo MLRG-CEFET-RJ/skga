@@ -30,8 +30,34 @@ class Decoder:
         self._y = y
         self._limits = [self._parameters[l] for l in list(self._parameters.keys())]
         self._cv = cv
-
+        """
+        parameters:<<DIZER QUAIS SÃO OS TIPOS ACEITOS>>
+            <<DEFINIR O QUE É ESSE PARÂMETRO(EXEMPLO ABAIXO)>>
+            The parameter grid to explore, as a dictionary mapping estimator
+            parameters to sequences of allowed values
+            An empty dict signifies default parameters
+            A sequence of dicts signifies a seguence of grids to search,
+            and is useful to avoid exploring parameter combinations that make no sense
+            or have no effect. See the examples below.
+        """
     def decode(self, chromosome: BaseChromosome, rewrite: bool) -> float:
+        """
+        Definição da decodificação, o qual usa como parâmetro o self, o cromossomo base da variável cromossomo e a variável booleana da reescrita.
+        O método retorna o resultado da função de avaliação para um dado cromossomo.
+        
+        Parameters
+        ----------
+        chromosome: BaseChromosome
+        <<DEFINIR O QUE É ESSE PARÂMETRO>>
+       
+        rewrite:bool
+        <<DEFINIR O QUE É ESSE PARÂMETRO>>
+       
+       Returns
+       -------
+       score:float
+       resultado da função de avaliação para o cromossomo
+       """
         return self.score(self.encoder(chromosome))
 
     def encoder(self, chromosome: BaseChromosome) -> dict:
