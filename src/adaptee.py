@@ -40,23 +40,7 @@ class Decoder:
     or have no effect. See the examples below.
     """
 
-"""
-    A classe Decoder é responsável por fazer a conversão dos parâmetros em indivíduos
-    do algoritmo genético e  também por convertê-los de volta.
 
-    Parameters
-    ----------
-    parameters: <<DIZER QUAIS SÃO OS TIPOS ACEITOS>>
-    <<DEFINIR O QUE É ESSE PARÂMETRO (EXEMPLO ABAIXO)>>
-    The parameter grid to explore, as a dictionary mapping estimator
-    parameters to sequences of allowed values.
-
-    An empty dict signifies default parameters.
-
-    A sequence of dicts signifies a sequence of grids to search, and is
-    useful to avoid exploring parameter combinations that make no sense
-    or have no effect. See the examples below.
-    """
     def __init__(self, parameters, estimator, X, y, cv):
         self._parameters = parameters
         self._estimator = estimator
@@ -65,9 +49,7 @@ class Decoder:
         self._limits = [self._parameters[l] for l in list(self._parameters.keys())]
         self._cv = cv
         
-#Definicao da decodificação, o qual usa como parametro o self, o cromossomo base da variável cromossomo e a variável booleana de reescrita
-#Isso converterá seu valor para float
-#Ele também retornará o score do self, usando como parâmetro o encoder do self o qual por sua vez o cromossomo como parâmetro
+        
     def decode(self, chromosome: BaseChromosome, rewrite: bool) -> float:
         """
         Definição da decodificação, o qual usa como parâmetro o cromossomo base  variável cromossomo e a variável booleana de escrita. 
@@ -77,7 +59,7 @@ class Decoder:
         
         ----------
         chromosome: BaseChromosome
-        <<DFINIR O QUE É ESSE PARÂMETRO>>
+        <<DEFINIR O QUE É ESSE PARÂMETRO>>
         
         rewrite:bool
         <<DEFINIR O QUE É ESSE PARÂMETRO>>
@@ -89,23 +71,28 @@ class Decoder:
         resultado da função de avaliação para o cromossomo
         """
         return self.score(self.encoder(chromosome))
-#Definição do encoder, usando como parâmetro o self e o cromossomo base da variável cromossomo o qual converterá o valor para dict
-#Ele também estabelece a variável do tamanho do cromossomo usando o length da variável chromosome
-#Também estabelece os hiperparâmetros como a cópia profunda da cópia usando como parâmetros os parâmetros do self.
+
+      
     def encoder(self, chromosome: BaseChromosome) -> dict:
+  """
+Definição do encoder, usando como parâmetro o self e o cromossomo base da variável cromossomo o qual converterá o valor para dict
+Ele também estabelece a variável do tamanho do cromossomo usando o length da variável chromosome
+Também estabelece os hiperparâmetros como a cópia profunda da cópia usando como parâmetros os parâmetros do self.
+Depois disso há a escolha dos valores a serem adicionados aos hiperparâmetros,com array das chaves,
+dependendo do tipo de variável do valor de limits em 0 e do tamanho do limits
+Após a sucessão de ifs e elses, a função for retornará os hiperparâmetros
+"""
         chr_size = len(chromosome)
         hyperparameters = copy.deepcopy(self._parameters)
 
-        #Criação do método for no encoder para efetuação das escolhas dos genes Idx dentro de seu array do alcance do tamanho do cromossomo
-        
+     
         for geneIdx in range(chr_size):
+      
             gene = chromosome[geneIdx]
             key = list(self._parameters.keys())[geneIdx]
             limits = self._parameters[key]  # evita for's aninhados
             
-            #Definição dos valores a serem adicionados aos hiperparâmetros,com array das chaves,
-            #dependendo do tipo de variável do valor de limits em 0 e do tamanho do limits
-            #Após a sucessão de ifs e elses, a função for retornará os hiperparâmetros
+            
             if type(limits) is np.ndarray:
                 limits = limits.tolist()
           
@@ -120,15 +107,19 @@ class Decoder:
 
         return hyperparameters
     
-    #Definição do score, o qual usa como parâmetros o self, os hiperparâmetros em dict, e os converte em float
-    #Ele define o clone estimador através da variável clone o qual usa como parâmetro o estimator do self
-    #Depois configura os parâmetros do clone estimador usando como parâmetro os hiperparâmetros 
-
+    
     def score(self, hyperparameters: dict) -> float:
+     """
+    Definição do score, o qual usa como parâmetros o self, os hiperparâmetros em dict, e os converte em float
+    Ele define o clone estimador através da variável clone o qual usa como parâmetro o estimator do self
+    Depois configura os parâmetros do clone estimador usando como parâmetro os hiperparâmetros 
+    """
         estimator_clone = clone(self._estimator)
         estimator_clone.set_params(**hyperparameters)
 
-        #Criação do erro de exceção para o clone estimador usando os valores self de X e self de Y.
+        """
+        Criação do erro de exceção para o clone estimador usando os valores self de X e self de Y.
+        """
         try:
             estimator_clone.fit(self._X, self._y)
         except ValueError:
