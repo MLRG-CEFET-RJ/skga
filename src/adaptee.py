@@ -20,8 +20,26 @@ from hbrkga.brkga_mp_ipr.types import BaseChromosome
 from hbrkga.brkga_mp_ipr.types_io import load_configuration
 from hbrkga.exploitation_method_BO_only_elites import BayesianOptimizerElites
 
-
+ 
 class Decoder:
+    """
+    A classe Decoder é responsável por fazer a conversão dos parâmetros em indivíduos do algoritmo genético e 
+    também por convertê-los de volta.
+
+    Parameters
+    ----------
+    parameters: <<DIZER QUAIS SÃO OS TIPOS ACEITOS>>
+    <<DEFINIR O QUE É ESSE PARÂMETRO (EXEMPLO ABAIXO)>>
+    The parameter grid to explore, as a dictionary mapping estimator
+    parameters to sequences of allowed values.
+
+    An empty dict signifies default parameters.
+
+    A sequence of dicts signifies a sequence of grids to search, and is
+    useful to avoid exploring parameter combinations that make no sense
+    or have no effect. See the examples below.
+    """
+
 
     def __init__(self, parameters, estimator, X, y, cv):
         self._parameters = parameters
@@ -30,21 +48,54 @@ class Decoder:
         self._y = y
         self._limits = [self._parameters[l] for l in list(self._parameters.keys())]
         self._cv = cv
-
+        
+        
     def decode(self, chromosome: BaseChromosome, rewrite: bool) -> float:
+        """
+        Definição da decodificação, o qual usa como parâmetro o cromossomo base  variável cromossomo e a variável booleana de escrita. 
+        O método retorna o resultado da função de avaliação para um dado cromossomo.
+        
+        Parameters
+        
+        ----------
+        chromosome: BaseChromosome
+        <<DEFINIR O QUE É ESSE PARÂMETRO>>
+        
+        rewrite:bool
+        <<DEFINIR O QUE É ESSE PARÂMETRO>>
+        
+        Returns
+        
+        -------
+        score:float
+        resultado da função de avaliação para o cromossomo
+        """
         return self.score(self.encoder(chromosome))
 
+      
     def encoder(self, chromosome: BaseChromosome) -> dict:
+  """
+Definição do encoder, usando como parâmetro o self e o cromossomo base da variável cromossomo o qual converterá o valor para dict
+Ele também estabelece a variável do tamanho do cromossomo usando o length da variável chromosome
+Também estabelece os hiperparâmetros como a cópia profunda da cópia usando como parâmetros os parâmetros do self.
+Depois disso há a escolha dos valores a serem adicionados aos hiperparâmetros,com array das chaves,
+dependendo do tipo de variável do valor de limits em 0 e do tamanho do limits
+Após a sucessão de ifs e elses, a função for retornará os hiperparâmetros
+"""
         chr_size = len(chromosome)
         hyperparameters = copy.deepcopy(self._parameters)
 
+     
         for geneIdx in range(chr_size):
+      
             gene = chromosome[geneIdx]
             key = list(self._parameters.keys())[geneIdx]
             limits = self._parameters[key]  # evita for's aninhados
+            
+            
             if type(limits) is np.ndarray:
                 limits = limits.tolist()
-
+          
             if type(limits[0]) is str:
                 hyperparameters[key] = limits[round(gene * (len(limits) - 1))]
             elif type(limits[0]) is int and len(limits) > 2:
@@ -55,11 +106,20 @@ class Decoder:
                 hyperparameters[key] = (gene * (limits[1] - limits[0])) + limits[0]
 
         return hyperparameters
-
+    
+    
     def score(self, hyperparameters: dict) -> float:
+     """
+    Definição do score, o qual usa como parâmetros o self, os hiperparâmetros em dict, e os converte em float
+    Ele define o clone estimador através da variável clone o qual usa como parâmetro o estimator do self
+    Depois configura os parâmetros do clone estimador usando como parâmetro os hiperparâmetros 
+    """
         estimator_clone = clone(self._estimator)
         estimator_clone.set_params(**hyperparameters)
 
+        """
+        Criação do erro de exceção para o clone estimador usando os valores self de X e self de Y.
+        """
         try:
             estimator_clone.fit(self._X, self._y)
         except ValueError:
@@ -69,8 +129,9 @@ class Decoder:
         return cross_val_score(estimator_clone, self._X, self._y, cv=self._cv).mean()
 
 
-class HyperBRKGASearchCV(BaseSearchCV):
-
+#Criando agora a classe do CV de Busca do HyperBRKGA usando como parâmetro o CV de Busca em Base
+    class HyperBRKGASearchCV(BaseSearchCV):
+#Definindo os valores esperados da definição inicial
     def __init__(
             self,
             estimator,
