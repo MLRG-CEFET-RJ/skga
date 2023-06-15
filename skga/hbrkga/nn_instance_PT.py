@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import hbrkga.data_utils as du
+from skga import hbrkga as du
 from sklearn.model_selection import train_test_split
 
 class NNInstance():

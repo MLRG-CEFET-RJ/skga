@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="skga",
-    version="0.0.2",
+    version="0.0.9",
     description="The python package implementing the HyperBRKGA algorithm optimizes hyperparameters of machine learning algorithms through a hybrid approach based on genetic algorithms.",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -19,7 +19,7 @@ setup(
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
     ],
-    packages=["skga", "hbrkga"],
+    packages=["skga", "skga.hbrkga", "skga.hbrkga.brkga_mp_ipr"],
     include_package_data=True,
     install_requires=[
         "bayesian-optimization==1.2.0",

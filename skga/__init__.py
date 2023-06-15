@@ -1,1 +1,1 @@
-from skga.adaptee import HyperBRKGASearchCV
+from .adaptee import HyperBRKGASearchCV

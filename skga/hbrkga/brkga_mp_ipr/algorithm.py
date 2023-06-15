@@ -26,9 +26,9 @@ import math
 from random import Random
 from typing import List, Callable
 
-from hbrkga.brkga_mp_ipr.enums import *
-from hbrkga.brkga_mp_ipr.types import *
-from hbrkga.brkga_mp_ipr.exploitation_method import ExploitationMethod
+from ..brkga_mp_ipr.enums import *
+from ..brkga_mp_ipr.types import *
+from ..brkga_mp_ipr.exploitation_method import ExploitationMethod
 
 import numpy
 

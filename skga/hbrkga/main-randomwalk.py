@@ -1,14 +1,14 @@
 from datetime import datetime
 
-from hbrkga.brkga_mp_ipr.enums import Sense
-from hbrkga.brkga_mp_ipr.types_io import load_configuration
-from hbrkga.brkga_mp_ipr.algorithm import BrkgaMpIpr
+from skga.hbrkga.brkga_mp_ipr.enums import Sense
+from skga.hbrkga.brkga_mp_ipr.types_io import load_configuration
+from skga.hbrkga.brkga_mp_ipr.algorithm import BrkgaMpIpr
 
-from hbrkga.nn_instance_PT import NNInstance
-from hbrkga.nn_decoder_PT import NNDecoder
+from skga.hbrkga.nn_instance_PT import NNInstance
+from skga.hbrkga.nn_decoder_PT import NNDecoder
 import random
 
-from exploitation_method_BO import BayesianOptimizer
+from exploitation_method_random_search import RandomWalk
 
 import sys
 
@@ -26,7 +26,7 @@ decoder = NNDecoder(
         instance = instance,
         limits = [(1000,2000), (2000,4000), (2000,6000), (0.000001,0.1), (0,0.001)])
 
-EM_BO = BayesianOptimizer(decoder = decoder, e = 0.3, steps = 3, percentage = float(sys.argv[3]))
+EM_RandomWalk = RandomWalk(decoder= decoder, e = 0.3, steps= 3, percentage= float(sys.argv[3]))
 
 brkga = BrkgaMpIpr(
         decoder=decoder,
@@ -36,7 +36,7 @@ brkga = BrkgaMpIpr(
         params=brkga_params,
         diversity_control_on = True,
         n_close = 3,
-        exploitation_method= EM_BO)
+        exploitation_method= EM_RandomWalk)
 
 brkga.initialize()
 
