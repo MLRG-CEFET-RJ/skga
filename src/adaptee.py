@@ -41,7 +41,7 @@ class Decoder:
     """
 
 
-    def __init__(self, parameters, estimator, X, y, cv):
+    def __init__(self, parameters: dict, estimator: float, X: float, y: float, cv: float):
         self._parameters = parameters
         self._estimator = estimator
         self._X = X
@@ -210,7 +210,7 @@ class Decoder:
 
         self.brkga.initialize()
 
-    def fit(self, X, y=None, *, groups=None, **fit_params):
+    def fit(self, X:d, y=None, *, groups=None, **fit_params):
      """
         O método fit é responsável por encontrar os valores de aptidão dos cromossomos baseado no self, seu valor em x, em y,
         bem como os grupos e os parâmetros de aptidão para parametrizar os pontuadores.
@@ -239,7 +239,7 @@ class Decoder:
         cv_orig = check_cv(self.cv, y, classifier=is_classifier(estimator))
         n_splits = cv_orig.get_n_splits(X, y, groups)
 
-        def evaluate_candidates(candidate_params, cv=None, more_results=None):
+        def evaluate_candidates(candidate_params= dict, cv=None, more_results=None):
       """
         A classe de avaliação dos candidatos. Nele,os cromossomos são avaliados para encontrar potenciais candidatos,
         levando-se em consideração os parâmetros de candidatos, a inexistência de valores no cv ou inexistência de mais resultados.
@@ -318,7 +318,7 @@ class Decoder:
 
         return self
 
-    def _run_search(self, evaluate_candidates):
+    def _run_search(self, evaluate_candidates: dict):
      """
         A última classe do HyperBrkgaCV,cujo propósito é rodar a busca. Para isso, só era preciso avaliar os candidatos, 
         usando como parâmetro a grade de parâmetros do self.
