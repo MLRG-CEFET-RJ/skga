@@ -1,12 +1,14 @@
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import sys
+sys.path.append('../skga')
 
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, train_test_split
 from sklearn.model_selection._search import BaseSearchCV
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
-from ..adaptee import HyperBRKGASearchCV
+from skga import HyperBRKGASearchCV
 import warnings
 
 sns.set()

@@ -1,5 +1,4 @@
 import copy
-import os
 import random
 from datetime import datetime
 
@@ -14,12 +13,7 @@ from sklearn.model_selection._validation import cross_val_score
 from sklearn.utils import indexable
 from sklearn.utils.validation import _check_fit_params
 
-from hbrkga.brkga_mp_ipr.algorithm import BrkgaMpIpr
-from hbrkga.brkga_mp_ipr.enums import Sense
-from hbrkga.brkga_mp_ipr.types import BaseChromosome
-from hbrkga.brkga_mp_ipr.types_io import load_configuration
-from hbrkga.exploitation_method_BO_only_elites import BayesianOptimizerElites
-
+from .hbrkga import BrkgaMpIpr, Sense, BaseChromosome, load_configuration_from_dict, BayesianOptimizerElites
 
 class Decoder:
 
@@ -103,8 +97,24 @@ class HyperBRKGASearchCV(BaseSearchCV):
         if brkga_params is not None:
             self.brkga_config, _ = brkga_params
         else:
-            self.brkga_config, _ = load_configuration("../../hbrkga/config.conf")
-
+            self.brkga_config , _ = load_configuration_from_dict({
+                'population_size': 10,
+                'elite_percentage': 0.3,
+                'mutants_percentage': 0.3,
+                'num_elite_parents': 1,
+                'total_parents': 2,
+                'bias_type': 'LOGINVERSE',
+                'num_independent_populations': 1,
+                'pr_number_pairs': 0,
+                'pr_minimum_distance': 0.15,
+                'pr_type': 'PERMUTATION',
+                'pr_selection': 'BESTSOLUTION',
+                'alpha_block_size': 1.0,
+                'pr_percentage': 1.0,
+                'exchange_interval': 0,
+                'num_exchange_indivuduals': 0,
+                'reset_interval': 0
+            })
         self._parameters = parameters
 
         self.decoder = Decoder(self._parameters, estimator, data, target, cv)

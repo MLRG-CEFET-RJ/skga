@@ -1,5 +1,5 @@
-from hbrkga.brkga_mp_ipr.types import BaseChromosome
-from hbrkga.nn_instance_PT import NNInstance
+from skga.hbrkga.brkga_mp_ipr.types import BaseChromosome
+from skga.hbrkga.nn_instance_PT import NNInstance
 
 class NNDecoder():
 

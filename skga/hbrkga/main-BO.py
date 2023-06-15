@@ -1,36 +1,32 @@
 from datetime import datetime
 
-from hbrkga.brkga_mp_ipr.enums import Sense
-from hbrkga.brkga_mp_ipr.types_io import load_configuration
-from hbrkga.brkga_mp_ipr.algorithm import BrkgaMpIpr
+from skga.hbrkga.brkga_mp_ipr.enums import Sense
+from skga.hbrkga.brkga_mp_ipr.types_io import load_configuration
+from skga.hbrkga.brkga_mp_ipr.algorithm import BrkgaMpIpr
 
-from hbrkga.nn_instance_PT import NNInstance
-from hbrkga.nn_decoder_PT import NNDecoder
+from skga.hbrkga.nn_instance_PT import NNInstance
+from skga.hbrkga.nn_decoder_PT import NNDecoder
 import random
 
-from exploitation_method_BO_only_elites import BayesianOptimizerElites
+from exploitation_method_BO import BayesianOptimizer
 
 import sys
 
 start = datetime.now()
 
 instance = NNInstance(
-        #train_path = sys.argv[1],
-        #test_path = sys.argv[2],
-        train_path = "./datasets/rectangles_train.csv",
-        test_path = "./datasets/rectangles_val.csv",
+        train_path = sys.argv[1],
+        test_path = sys.argv[2],
         epochs_no = 300,
-        batch_size = 50000)
+        batch_size = 30000)
 
 brkga_params, _ = load_configuration("./config.conf")
 
-eliteNumber = int(brkga_params.elite_percentage * brkga_params.population_size)
-
 decoder = NNDecoder(
         instance = instance,
-        limits = [(5,15), (5,30), (5,45), (0.000001,0.1), (0,0.001)])
+        limits = [(1000,2000), (2000,4000), (2000,6000), (0.000001,0.1), (0,0.001)])
 
-EM_BO = BayesianOptimizerElites(decoder = decoder, e = 0.3, steps = 3, percentage = 0.6, eliteNumber = eliteNumber)
+EM_BO = BayesianOptimizer(decoder = decoder, e = 0.3, steps = 3, percentage = float(sys.argv[3]))
 
 brkga = BrkgaMpIpr(
         decoder=decoder,
@@ -52,7 +48,6 @@ for i in range(1, 11):
 
         for pop_idx in range(len(brkga._current_populations)):
                 print(f"Population {pop_idx}:")
-                print(f"Population diversity score = {brkga.calculate_population_diversity(pop_idx)}")
                 print("")
                 print("Chromosomes = ")
                 for chromo_idx in range(len(brkga._current_populations[pop_idx].chromosomes)):

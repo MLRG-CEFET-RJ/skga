@@ -23,10 +23,9 @@
 
 from itertools import chain
 
-from hbrkga.brkga_mp_ipr.types import BrkgaParams, ExternalControlParams
-from hbrkga.brkga_mp_ipr.exceptions import LoadError
+from skga.hbrkga.brkga_mp_ipr.types import BrkgaParams, ExternalControlParams
+from skga.hbrkga.brkga_mp_ipr.exceptions import LoadError
 
-import os
 
 ###############################################################################
 

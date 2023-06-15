@@ -1,10 +1,9 @@
 from sklearn import svm, datasets
 from sklearn.model_selection import train_test_split
 import sys
-sys.path.append('../../../hbrkga_adaptee')
-
-from hbrkga.brkga_mp_ipr.types_io import load_configuration_from_dict
-from src.adaptee import HyperBRKGASearchCV
+sys.path.append('../skga')
+from skga.hbrkga import load_configuration_from_dict
+from skga import HyperBRKGASearchCV
 
 irisX, irisY = datasets.load_iris(return_X_y=True)
 X_train, X_test, y_train, y_test = train_test_split(irisX, irisY, test_size=0.5, random_state=0)

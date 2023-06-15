@@ -3,9 +3,11 @@ import pandas as pd
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, train_test_split
 from sklearn.model_selection._search import BaseSearchCV
 from sklearn.tree import DecisionTreeClassifier
-import warnings
 from sklearn.preprocessing import StandardScaler
-from ..adaptee import HyperBRKGASearchCV
+import warnings
+import sys
+sys.path.append('../skga')
+from skga import HyperBRKGASearchCV
 
 warnings.filterwarnings('ignore')
 

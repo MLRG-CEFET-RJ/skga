@@ -24,7 +24,7 @@
 from __future__ import annotations
 import copy
 
-from hbrkga.brkga_mp_ipr.enums import BiasFunctionType, PathRelinkingType, \
+from skga.hbrkga.brkga_mp_ipr.enums import BiasFunctionType, PathRelinkingType, \
     PathRelinkingSelection
 
 ###############################################################################
