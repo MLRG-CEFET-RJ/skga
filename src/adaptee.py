@@ -75,13 +75,21 @@ class Decoder:
       
     def encoder(self, chromosome: BaseChromosome) -> dict:
   """
-Definição do encoder, usando como parâmetro o self e o cromossomo base da variável cromossomo o qual converterá o valor para dict
-Ele também estabelece a variável do tamanho do cromossomo usando o length da variável chromosome
-Também estabelece os hiperparâmetros como a cópia profunda da cópia usando como parâmetros os parâmetros do self.
-Depois disso há a escolha dos valores a serem adicionados aos hiperparâmetros,com array das chaves,
-dependendo do tipo de variável do valor de limits em 0 e do tamanho do limits
-Após a sucessão de ifs e elses, a função for retornará os hiperparâmetros
-"""
+        O método encoder é responsável por pegar o valor do cromossomo base repassado na decodificação
+        e converter(encode) para o formato dict.
+        Para isso são declarados como parâmetros: o tamanho do cromossomo;e  os hiperparâmetros,
+        declarando-o como resultado do método deepcopy da cópia,o qual usa os parâmetros de self.
+        Após essas declarações, ele percorre o cromossomo usando os genes Idx como marcadores.
+        Nisso, os genes encontrados são listados num array de genes Idx, assim como é elaborado
+        uma lista array de chaves dos parâmetros de self, e depois os limites, com base nos valores
+        do array de chaves já mencionado.
+        Para cada valor valor encontrado no array de limites, é listado o valor dos limites até agora.
+        Dependendo do tipo(type) de valor encontrado nos limites, o valor do hiperparâmetro criado pode ser: str(string);
+        int(integer), contanto que não ultrpasse o valor do limites em 2 unidades; ou mesmo bool(boolean, ou seja, 
+        retorna 0 ou 1),ou nenhum deles caso contrário. Após o ciclo de if's terminar, é retornado o valor dos hiperparâmetros.         
+        """
+    
+
         chr_size = len(chromosome)
         hyperparameters = copy.deepcopy(self._parameters)
 
@@ -110,9 +118,13 @@ Após a sucessão de ifs e elses, a função for retornará os hiperparâmetros
     
     def score(self, hyperparameters: dict) -> float:
      """
-    Definição do score, o qual usa como parâmetros o self, os hiperparâmetros em dict, e os converte em float
-    Ele define o clone estimador através da variável clone o qual usa como parâmetro o estimator do self
-    Depois configura os parâmetros do clone estimador usando como parâmetro os hiperparâmetros 
+        A classe score é responsável por transformar o valor dos hiperparâmetros de self encontrados, no formato dict,
+        em formato float para poder indicar a pontuação dos cromossomos encontrados.
+        Primeiro, são declarados: o clone do estimador;e os parâmetros configurados do mesmo, com base nos hiperparâmetros.
+        Segundo, o try declara para que o clone do estimador usa o método fit(aptidão),com base nos valores em x e em y do 
+        self, exceto quando dá erro no valor, o qual nesse caso, o valor retornado é 0.
+        Após o try, é retornado o valor de pontuação do cruzamento dos valores encontrados na classe score,
+        através do cálculo da média deles.
     """
         estimator_clone = clone(self._estimator)
         estimator_clone.set_params(**hyperparameters)
@@ -129,9 +141,16 @@ Após a sucessão de ifs e elses, a função for retornará os hiperparâmetros
         return cross_val_score(estimator_clone, self._X, self._y, cv=self._cv).mean()
 
 
-#Criando agora a classe do CV de Busca do HyperBRKGA usando como parâmetro o CV de Busca em Base
+
     class HyperBRKGASearchCV(BaseSearchCV):
-#Definindo os valores esperados da definição inicial
+"""
+    Classe do CV de Busca do HyperBRKGA. Aqui é definido muitas classes  e variáveis importantes para o
+    funcionamento do HyperBRKGA.
+    A classe de inicialização declara alguns parâmetros e variáveis nos quais o funcionamento do Algoritmo
+    Genético se sustenta, bem como o valor inicial de alguns deles.
+    Após a declaração destas variáveis, bem como seus valores e sobre quais outras variáveis, métodos e parâmetros eles se sustentam,
+    ele inicializa o brkga.
+"""
     def __init__(
             self,
             estimator,
@@ -192,8 +211,20 @@ Após a sucessão de ifs e elses, a função for retornará os hiperparâmetros
         self.brkga.initialize()
 
     def fit(self, X, y=None, *, groups=None, **fit_params):
+     """
+        O método fit é responsável por encontrar os valores de aptidão dos cromossomos baseado no self, seu valor em x, em y,
+        bem como os grupos e os parâmetros de aptidão para parametrizar os pontuadores.
+        Para isso, é declarado, primeiramente, o estimador.
+        Depois, ele avalia se o método de pontuação de self é chamável. Em caso positivo, ele é adicionado aos pontuadores.
+        Em caso de não existir valor  ou se ele for uma instância do método em string, os pontuadores checam o método de 
+        pontuação do self, bem como seu estimador.
+        Se nenhum dos casos ocorrer, os pontuadores checam o método de pontuação do self e seu estimador na forma multimétrica, 
+        e então é ativado o metodo do self de checar suas multimétricas de reaptidão se baseando nos pontuadores como parâmetros.
+        Após a verificação, é indexado os valores em x, em y e seus grupos. E depois são checados os parâmetros de aptidão.
+        Também são verificados os pontos de origem do cv, bem como as n divisões do cv de origem.
+      """
         estimator = self.estimator
-
+     
         if callable(self.scoring):
             scorers = self.scoring
         elif self.scoring is None or isinstance(self.scoring, str):
@@ -209,6 +240,25 @@ Após a sucessão de ifs e elses, a função for retornará os hiperparâmetros
         n_splits = cv_orig.get_n_splits(X, y, groups)
 
         def evaluate_candidates(candidate_params, cv=None, more_results=None):
+      """
+        A classe de avaliação dos candidatos. Nele,os cromossomos são avaliados para encontrar potenciais candidatos,
+        levando-se em consideração os parâmetros de candidatos, a inexistência de valores no cv ou inexistência de mais resultados.
+        Primeiramente, a classe começa a marcar o tempo da avaliação, usando data real como referência, depois ele
+        faz uma lista dos parâmetros dos candidatos e,depois, os converte em um array contendo todos os parâmetros encontrados.
+        E então começa a marcar as gerações da primeira até a décima-primeira. A cada geração imprimida, ele evolui o brkga.
+        Ainda no ciclo de cada geração, para cada idx na população no alcance população atual do brkga, ele calcula e marca a pontuação
+        de diversidade da mesma. 
+        Para valores de verbose do self acima de 2, é imprimida a população, sua pontuação de diversidade e os cromossomos encontrados.
+        Para o caso do cromossomo idx estiver no alcance dos cromossomos das populações atuais do brkga, 
+        este cromossomo será imprimido, assim como sua aptidão. Depois, são listadas todas as aptidões de cromossomos encontradas.
+        Após esses dados, são definidas o melhor cromossomo, bem como a melhor aptidão.
+        Após o fim do ciclo de cada geração, são imprimidas: o valor do melhor cromossomo encontrado até agora;
+        melhor pontuação(aptidão) até agora; tempo decorrido desde o início da avaliação.
+        Após o último ciclo de geração ser concluído, ele imprime os resultados finais, mostrando o melhor cromossomo encontrado , 
+        a melhor aptidão, bem como o tempo total decorrido desde que o programa iniciou.
+        Após isso, é extendido os parâmetros de candidatos ,os dados e resultados de self são atualizados, 
+        e só então o valor de self é retornado.
+      """
             start = datetime.now()
             candidate_params = list(candidate_params)
             all_candidate_params = []
@@ -269,4 +319,8 @@ Após a sucessão de ifs e elses, a função for retornará os hiperparâmetros
         return self
 
     def _run_search(self, evaluate_candidates):
+     """
+        A última classe do HyperBrkgaCV,cujo propósito é rodar a busca. Para isso, só era preciso avaliar os candidatos, 
+        usando como parâmetro a grade de parâmetros do self.
+        """
         evaluate_candidates(ParameterGrid(self._parameters))
