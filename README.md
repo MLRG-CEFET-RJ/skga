@@ -1,4 +1,4 @@
-# SKGA Repository
+# SKGA
 
 Welcome to the SKGA repository! This repository contains the `skga` package, which is a Python library for performing machine learning hyperparameters optimization. 
 
