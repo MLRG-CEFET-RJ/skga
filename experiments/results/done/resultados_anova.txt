@@ -1,0 +1,77 @@
+DecisionTreeClassifier:
+Estatística do teste = 54.6440 | Valor p = 3.22276812898271e-10
+Conclusão: 
+Existe uma diferença significativa entre pelo menos um par de grupos
+
+-----------------------------------------------
+
+DecisionTreeRegressor:
+Estatística do teste = 5.3435 | Valor p = 0.021898969489300864
+Conclusão: 
+Existe uma diferença significativa entre pelo menos um par de grupos
+
+-----------------------------------------------
+
+KNeighborsClassifier:
+Estatística do teste = 9.6228 | Valor p = 0.0006997840164140096
+Conclusão: 
+Existe uma diferença significativa entre pelo menos um par de grupos
+
+-----------------------------------------------
+
+KNeighborsRegressor:
+Estatística do teste = 3.3519 | Valor p = 0.08166947877229269
+Conclusão: 
+As médias não são significativamente diferentes
+
+-----------------------------------------------
+
+Lasso:
+Estatística do teste = 4.7417 | Valor p = 0.030371006784825447
+Conclusão: 
+Existe uma diferença significativa entre pelo menos um par de grupos
+
+-----------------------------------------------
+
+LinearRegression:
+Estatística do teste = inf | Valor p = 0.0
+Conclusão: 
+Existe uma diferença significativa entre pelo menos um par de grupos
+
+-----------------------------------------------
+
+LogisticRegression:
+Estatística do teste = 14.2950 | Valor p = 5.833913825904762e-05
+Conclusão: 
+Existe uma diferença significativa entre pelo menos um par de grupos
+
+-----------------------------------------------
+
+MLPClassifier:
+Estatística do teste = 0.0347 | Valor p = 0.966008903150185
+Conclusão: 
+As médias não são significativamente diferentes
+
+-----------------------------------------------
+
+MLPRegressor:
+Estatística do teste = 1.7877 | Valor p = 0.20914964677984146
+Conclusão: 
+As médias não são significativamente diferentes
+
+-----------------------------------------------
+
+RandomForestClassifier:
+Estatística do teste = 84.0332 | Valor p = 2.546518661641204e-12
+Conclusão: 
+Existe uma diferença significativa entre pelo menos um par de grupos
+
+-----------------------------------------------
+
+XGBClassifier:
+Estatística do teste = 9.0590 | Valor p = 0.004000681241600256
+Conclusão: 
+Existe uma diferença significativa entre pelo menos um par de grupos
+
+-----------------------------------------------
+
