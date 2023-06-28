@@ -17,7 +17,7 @@ from .hbrkga import BrkgaMpIpr, Sense, BaseChromosome, load_configuration_from_d
 
 class Decoder:
 
-    def __init__(self, parameters, estimator, X, y, cv):
+    def __init__(self, parameters: dict, estimator: float, X:float, y: float, cv: dict):
         self._parameters = parameters
         self._estimator = estimator
         self._X = X
@@ -157,7 +157,7 @@ class HyperBRKGASearchCV(BaseSearchCV):
         cv_orig = check_cv(self.cv, y, classifier=is_classifier(estimator))
         n_splits = cv_orig.get_n_splits(X, y, groups)
 
-        def evaluate_candidates(candidate_params, cv=None, more_results=None):
+        def evaluate_candidates(candidate_params: float, cv=None, more_results=None):
             start = datetime.now()
             candidate_params = list(candidate_params)
             all_candidate_params = []
@@ -217,5 +217,5 @@ class HyperBRKGASearchCV(BaseSearchCV):
 
         return self
 
-    def _run_search(self, evaluate_candidates):
+    def _run_search(self, evaluate_candidates: bool):
         evaluate_candidates(ParameterGrid(self._parameters))
